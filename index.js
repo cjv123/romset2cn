@@ -3,6 +3,9 @@ var path=require('path');
 let xlsx = require('node-xlsx').default;
 let xml2js = require('xml2js');
 
+let gameListFiledName="game";
+let enDatFile="FinalBurn Neo (ClrMame Pro XML, Arcade only).dat";
+let outDatFile="rom_set_fbn_cn.xml";
 
 let run=async ()=>{
     let nameMap={};
@@ -25,10 +28,10 @@ let run=async ()=>{
 
 
     var parser = new xml2js.Parser();
-    let data =fs.readFileSync('MAME v0.238.dat');
+    let data =fs.readFileSync(enDatFile);
     let xmlObj = await parser.parseStringPromise(data);
     // console.log(xmlObj);
-    let gameList = xmlObj.datafile.machine;
+    let gameList = xmlObj.datafile[gameListFiledName];
     for(let i=0;i<gameList.length;i++) {
         let fileName = gameList[i].$.name;
         if(fileName==null){
@@ -48,7 +51,7 @@ let run=async ()=>{
     const builder = new xml2js.Builder();
     const xml = builder.buildObject(xmlObj); 
     // console.log(xml);
-    fs.writeFileSync("arc_rom_set_cn.xml", xml);
+    fs.writeFileSync(outDatFile, xml);
     
 }
 
