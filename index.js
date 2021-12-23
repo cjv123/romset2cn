@@ -17,11 +17,9 @@ let run=async ()=>{
             let type = rowData[2];
             let year = rowData[3];
             let com = rowData[4];
-            if(gameName==null){
-                gameName = fileName;
+            if(gameName){
+                nameMap[fileName]=gameName;
             }
-
-            nameMap[fileName]=gameName;
         }
     }
 
@@ -32,13 +30,16 @@ let run=async ()=>{
     // console.log(xmlObj);
     let gameList = xmlObj.datafile.machine;
     for(let i=0;i<gameList.length;i++) {
-        let fileName = gameList[i].name;
-        if(gameList[i].$.cloneof){
-            fileName = gameList[i].$.cloneof;
+        let fileName = gameList[i].$.name;
+        if(fileName==null){
+            if(gameList[i].$.cloneof){
+                fileName = gameList[i].$.cloneof;
+            }
+            if(gameList[i].$.romof){
+                fileName = gameList[i].$.romof;
+            }
         }
-        if(gameList[i].$.romof){
-            fileName = gameList[i].$.romof;
-        }
+        
         if(nameMap[fileName]){
             gameList[i].description = [nameMap[fileName]];
         }
